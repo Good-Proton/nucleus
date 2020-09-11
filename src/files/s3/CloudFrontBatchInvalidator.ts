@@ -57,6 +57,8 @@ export class CloudFrontBatchInvalidator {
     const itemsToUse = this.queue.slice(0, INVALIDATE_PER_ATTEMPT);
     this.queue = this.queue.slice(INVALIDATE_PER_ATTEMPT);
 
+    const itemsToUseWithEncodedTilda = itemsToUse.map(i => i.replace(/\~/g, '%7e'));
+
     const cloudFront = new AWS.CloudFront();
     cloudFront.createInvalidation({
       DistributionId: this.cloudfrontConfig!.distributionId,
@@ -64,7 +66,7 @@ export class CloudFrontBatchInvalidator {
         CallerReference: hat(),
         Paths: {
           Quantity: itemsToUse.length,
-          Items: itemsToUse,
+          Items: itemsToUseWithEncodedTilda,
         },
       },
     }, (err, invalidateInfo) => {
