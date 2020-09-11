@@ -250,7 +250,7 @@ export default class ChannelVersionList extends React.PureComponent<ChannelVersi
       const rawValue = prompt('Please enter a new rollout percentage (between 0 and 100)');
       if (typeof rawValue !== 'string') return;
       const newRollout = parseInt(rawValue, 10);
-      if (isNaN(newRollout) || newRollout < 0 || newRollout > 100) return alert('Invalid rollout percentage entered, expected a number between 0 and 100');
+      if (isNaN(newRollout) || ![1, 10, 25, 33, 50, 100].includes(newRollout)) return alert('Invalid rollout percentage entered, expected next numbers [1, 10, 25, 33, 50, 100]');
       this.setState({
         actionRunning: true,
       });
