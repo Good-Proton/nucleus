@@ -501,11 +501,13 @@ router.post('/:id/channel/:channelId/upload', noPendingMigrations, upload.any(),
           error: 'Looks like you tried to upload two or more files with the same file name',
         });
       }
-      for (const fileName of fileNames) {
-        if (fileName.indexOf(req.body.version) === -1) {
-          return res.status(400).json({
-            error: `The file name "${fileName}" did not contain the provided version, files uploaded to nucleus must contain the version to ensure cache busting`,
-          });
+      if(!req.body.version.includes('beta')){
+        for (const fileName of fileNames) {
+          if (fileName.indexOf(req.body.version) === -1) {
+            return res.status(400).json({
+              error: `The file name "${fileName}" did not contain the provided version, files uploaded to nucleus must contain the version to ensure cache busting`,
+            });
+          }
         }
       }
       const temporaryStore = await driver.saveTemporaryVersionFiles(

@@ -6,10 +6,7 @@ import * as config from '../../config';
 
 const d = debug('nucleus:s3');
 
-AWS.config.credentials = new AWS.EC2MetadataCredentials({
-  httpOptions: { timeout: 5000 },
-  maxRetries: 10,
-});
+AWS.config.credentials = new AWS.SharedIniFileCredentials();
 
 export default class S3Store implements IFileStore {
   constructor(public s3Config = config.s3) {}
