@@ -1,5 +1,9 @@
 import * as fs from 'fs-extra';
 import * as path from 'path';
+import * as debug from 'debug';
+
+
+const d = debug('nucleus:sync');
 
 export const syncDirectoryToStore = async (store: IFileStore, keyPrefix: string, localBaseDir: string, relative: string = '.', needOverwrite?: (s:string) => boolean) => {
   for (const child of await fs.readdir(path.resolve(localBaseDir, relative))) {
@@ -14,6 +18,8 @@ export const syncDirectoryToStore = async (store: IFileStore, keyPrefix: string,
       } else {
         overwrite = true;
       }
+
+      d(`syncDirectoryToStore 1, needOverwrite=${needOverwrite ? 'true' : 'false'}, keyPrefix='${keyPrefix}, overwrite='${overwrite}`);
 
       await store.putFile(
         path.posix.join(keyPrefix, relative, child),
