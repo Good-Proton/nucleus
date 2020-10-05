@@ -1,16 +1,24 @@
 import * as fs from 'fs-extra';
 import * as path from 'path';
 
-export const syncDirectoryToStore = async (store: IFileStore, keyPrefix: string, localBaseDir: string, relative: string = '.') => {
+export const syncDirectoryToStore = async (store: IFileStore, keyPrefix: string, localBaseDir: string, relative: string = '.', needOverwrite?: (s:string) => boolean) => {
   for (const child of await fs.readdir(path.resolve(localBaseDir, relative))) {
     const absoluteChild = path.resolve(localBaseDir, relative, child);
     if ((await fs.stat(absoluteChild)).isDirectory()) {
       await syncDirectoryToStore(store, keyPrefix, localBaseDir, path.join(relative, child));
     } else {
+
+      let overwrite;
+      if(needOverwrite){
+        overwrite = needOverwrite(keyPrefix);
+      } else {
+        overwrite = true;
+      }
+
       await store.putFile(
         path.posix.join(keyPrefix, relative, child),
         await fs.readFile(absoluteChild),
-        true,
+        overwrite,
       );
     }
   }

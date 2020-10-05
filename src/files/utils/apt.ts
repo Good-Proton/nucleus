@@ -120,6 +120,8 @@ export const addFileToAptRepo = async (store: IFileStore, {
       store,
       storeKey,
       tmpDir,
+      undefined,
+      (s: string) => s.includes('Packages') || s.includes('Sources') || s.includes('Release')
     );
   });
 };
