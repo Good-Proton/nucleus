@@ -19,7 +19,7 @@ export const syncDirectoryToStore = async (store: IFileStore, keyPrefix: string,
         overwrite = true;
       }
 
-      d(`syncDirectoryToStore 1, needOverwrite=${needOverwrite ? 'true' : 'false'}, keyPrefix='${keyPrefix}, overwrite='${overwrite}`);
+      d(`syncDirectoryToStore called, needOverwrite=${needOverwrite ? 'true' : 'false'}, keyPrefix='${keyPrefix}, overwrite='${overwrite}`);
 
       await store.putFile(
         path.posix.join(keyPrefix, relative, child),
