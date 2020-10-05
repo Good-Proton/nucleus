@@ -9,7 +9,7 @@ export const syncDirectoryToStore = async (store: IFileStore, keyPrefix: string,
   for (const child of await fs.readdir(path.resolve(localBaseDir, relative))) {
     const absoluteChild = path.resolve(localBaseDir, relative, child);
     if ((await fs.stat(absoluteChild)).isDirectory()) {
-      await syncDirectoryToStore(store, keyPrefix, localBaseDir, path.join(relative, child));
+      await syncDirectoryToStore(store, keyPrefix, localBaseDir, path.join(relative, child), needOverwrite);
     } else {
 
       let overwrite;
@@ -19,7 +19,7 @@ export const syncDirectoryToStore = async (store: IFileStore, keyPrefix: string,
         overwrite = true;
       }
 
-      d(`syncDirectoryToStore called, needOverwrite=${needOverwrite ? 'true' : 'false'}, child='${child}, overwrite='${overwrite}`);
+      d(`syncDirectoryToStore called, typeof needOverwrite=${typeof needOverwrite}, child='${child}, overwrite='${overwrite}`);
 
       await store.putFile(
         path.posix.join(keyPrefix, relative, child),
