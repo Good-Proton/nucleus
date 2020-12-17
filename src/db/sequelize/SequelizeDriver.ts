@@ -460,6 +460,7 @@ export default class SequelizeDriver extends BaseDriver {
 
 const { performance, PerformanceObserver } = require('perf_hooks');
 
+d('wrap `SequelizeDriver.prototype`');
 for (const p in Reflect.ownKeys(SequelizeDriver.prototype)) {
   const f = (SequelizeDriver.prototype as any)[p];
   if (typeof f === 'function') {
