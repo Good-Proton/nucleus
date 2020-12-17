@@ -462,7 +462,7 @@ const { performance, PerformanceObserver } = require('perf_hooks');
 
 d('wrap `SequelizeDriver.prototype`');
 let cid = 0;
-for (const p in Reflect.ownKeys(SequelizeDriver.prototype)) {
+for (const p of Reflect.ownKeys(SequelizeDriver.prototype)) {
   const f = (SequelizeDriver.prototype as any)[p];
   if (typeof f === 'function') {
     d(`wrap ${f.name}`);
