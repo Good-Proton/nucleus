@@ -461,11 +461,26 @@ export default class SequelizeDriver extends BaseDriver {
 const { performance, PerformanceObserver } = require('perf_hooks');
 
 d('wrap `SequelizeDriver.prototype`');
+let cid = 0;
 for (const p in Reflect.ownKeys(SequelizeDriver.prototype)) {
   const f = (SequelizeDriver.prototype as any)[p];
   if (typeof f === 'function') {
     d(`wrap ${f.name}`);
-    (SequelizeDriver.prototype as any)[p] = performance.timerify(f);
+    (SequelizeDriver.prototype as any)[p] = function () {
+      const startMark = `SequelizeDriver:${f.name}#${cid++} start`;
+      performance.mark(startMark);
+      const r = f.apply(this, arguments);
+      if (r instanceof Promise) {
+        (r as Promise<any>).catch(() => { }).then(() => {
+          const endMark = `SequelizeDriver:${f.name}#${cid++} end`;
+          performance.measure(`async ${f.name}`, startMark, endMark);
+        });
+      } else {
+        const endMark = `SequelizeDriver:${f.name}#${cid++} end`;
+        performance.measure(f.name, startMark, endMark);
+      }
+      return r;
+    };
   }
 }
 
