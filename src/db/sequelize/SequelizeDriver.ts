@@ -1,9 +1,12 @@
+import * as debug from 'debug';
 import { Sequelize } from 'sequelize-typescript';
 
 import BaseDriver from '../BaseDriver';
 import getSequelize, { App, TeamMember, Channel, Version, File, TemporarySave, TemporarySaveFile, WebHook, WebHookError, Migration } from './models';
 import BaseMigration from '../../migrations/BaseMigration';
 import * as config from '../../config';
+
+const d = debug('nucleus:SequelizeDriver');
 
 const hat = require('hat');
 
@@ -467,7 +470,7 @@ for (const p in Reflect.ownKeys(SequelizeDriver.prototype)) {
 const obs = new PerformanceObserver((list: any) => {
   const entries = list.getEntries();
   entries.forEach((entry: any) => {
-    console.log(`SequelizeDriver::'${entry.name}'`, entry.duration);
+    d(`performance entry '${entry.name}'`, entry.duration);
   });
   // obs.disconnect();
 });
