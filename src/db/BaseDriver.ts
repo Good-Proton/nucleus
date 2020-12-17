@@ -62,7 +62,7 @@ export default abstract class BaseDriver extends IDBDriver {
       .find(testChannel => testChannel.id === channel.id);
     if (!deepChannel) return;
     const versionsToWrite = deepChannel.versions;
-    await store.putFile(path.posix.join(app.slug, channel.id!, 'versions.json'), Buffer.from(JSON.stringify(versionsToWrite, null, 2)), true);
+    await store.putFile(path.posix.join(app.slug, channel.id, 'versions.json'), Buffer.from(JSON.stringify(versionsToWrite, null, 2)), true);
   }
 
   /**

@@ -455,8 +455,7 @@ export default class SequelizeDriver extends BaseDriver {
   }
 }
 
-import { performance, PerformanceObserver } from 'perf_hooks';
-//const { performance, PerformanceObserver } = require('perf_hooks');
+const { performance, PerformanceObserver } = require('perf_hooks');
 
 for (const p in Reflect.ownKeys(SequelizeDriver.prototype)) {
   const f = (SequelizeDriver.prototype as any)[p];
@@ -465,9 +464,9 @@ for (const p in Reflect.ownKeys(SequelizeDriver.prototype)) {
   }
 }
 
-const obs = new PerformanceObserver((list) => {
+const obs = new PerformanceObserver((list: any) => {
   const entries = list.getEntries();
-  entries.forEach((entry) => {
+  entries.forEach((entry: any) => {
     console.log(`SequelizeDriver::'${entry.name}'`, entry.duration);
   });
   // obs.disconnect();
