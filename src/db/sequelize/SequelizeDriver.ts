@@ -463,6 +463,7 @@ const { performance, PerformanceObserver } = require('perf_hooks');
 for (const p in Reflect.ownKeys(SequelizeDriver.prototype)) {
   const f = (SequelizeDriver.prototype as any)[p];
   if (typeof f === 'function') {
+    d(`wrap ${f.name}`);
     (SequelizeDriver.prototype as any)[p] = performance.timerify(f);
   }
 }
@@ -470,7 +471,7 @@ for (const p in Reflect.ownKeys(SequelizeDriver.prototype)) {
 const obs = new PerformanceObserver((list: any) => {
   const entries = list.getEntries();
   entries.forEach((entry: any) => {
-    d(`performance entry '${entry.name}'`, entry.duration);
+    d(entry.name, entry.duration);
   });
   // obs.disconnect();
 });
