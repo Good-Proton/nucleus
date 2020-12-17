@@ -248,7 +248,7 @@ export default async function () {
     host: config.sequelize.host,
     port: config.sequelize.port,
     storage: config.sequelize.storage,
-    logging: debug('sequalize'),
+    logging: false,
     benchmark: true
   });
 
