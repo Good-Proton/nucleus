@@ -491,4 +491,4 @@ const obs = new PerformanceObserver((list: any) => {
   });
   // obs.disconnect();
 });
-obs.observe({ entryTypes: ['function'], buffered: true });
+obs.observe({ entryTypes: ['measure'], buffered: true });
