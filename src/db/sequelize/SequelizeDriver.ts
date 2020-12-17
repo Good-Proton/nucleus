@@ -454,3 +454,22 @@ export default class SequelizeDriver extends BaseDriver {
     return this.fixFileStruct(rawFile);
   }
 }
+
+import { performance, PerformanceObserver } from 'perf_hooks';
+//const { performance, PerformanceObserver } = require('perf_hooks');
+
+for (const p in Reflect.ownKeys(SequelizeDriver.prototype)) {
+  const f = (SequelizeDriver.prototype as any)[p];
+  if (typeof f === 'function') {
+    (SequelizeDriver.prototype as any)[p] = performance.timerify(f);
+  }
+}
+
+const obs = new PerformanceObserver((list) => {
+  const entries = list.getEntries();
+  entries.forEach((entry) => {
+    console.log(`SequelizeDriver::'${entry.name}'`, entry.duration);
+  });
+  // obs.disconnect();
+});
+obs.observe({ entryTypes: ['function'], buffered: true });

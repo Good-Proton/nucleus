@@ -199,11 +199,11 @@ router.post('/:id/webhook', requireLogin, noPendingMigrations, a(async (req, res
 router.delete('/:id/webhook/:webHookId', requireLogin, noPendingMigrations, a(async (req, res) => {
   if (stopNoPerms(req, res)) return;
   d(`Deleting WebHook: '${req.params.webHookId}' for app: '${req.targetApp.slug}'`);
-  const rawHook = await driver.getWebHook(req.targetApp, req.params.webHookId);
+  const rawHook = await driver.getWebHook(req.targetApp, Number(req.params.webHookId));
   if (!rawHook) return res.status(404).json({ error: 'Not Found' });
   const hook = WebHook.fromNucleusHook(req.targetApp, rawHook);
   await hook.unregister();
-  await driver.deleteWebHook(req.targetApp, req.params.webHookId);
+  await driver.deleteWebHook(req.targetApp, Number(req.params.webHookId));
   res.json({
     success: true,
   });
@@ -241,7 +241,7 @@ router.get('/:id/channel/:channelId/temporary_releases/:temporarySaveId/:fileNam
       error: 'Channel not found',
     });
   }
-  const save = await driver.getTemporarySave(req.params.temporarySaveId);
+  const save = await driver.getTemporarySave(Number(req.params.temporarySaveId));
   if (!save) {
     return res.status(404).json({
       error: 'That temporary save was not found',
@@ -269,7 +269,7 @@ router.post('/:id/channel/:channelId/temporary_releases/:temporarySaveId/release
       error: 'Channel not found',
     });
   }
-  const save = await driver.getTemporarySave(req.params.temporarySaveId);
+  const save = await driver.getTemporarySave(Number(req.params.temporarySaveId));
   if (!save) {
     return res.status(404).json({
       error: 'That temporary save was not found',
@@ -349,7 +349,7 @@ router.post('/:id/channel/:channelId/temporary_releases/:temporarySaveId/delete'
       error: 'Channel not found',
     });
   }
-  const save = await driver.getTemporarySave(req.params.temporarySaveId);
+  const save = await driver.getTemporarySave(Number(req.params.temporarySaveId));
   if (!save) {
     return res.status(404).json({
       error: 'That temporary save was not found',
