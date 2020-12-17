@@ -489,7 +489,11 @@ for (const p of Reflect.ownKeys(SequelizeDriver.prototype)) {
 const obs = new PerformanceObserver((list: any) => {
   const entries = list.getEntries();
   entries.forEach((entry: any) => {
-    d(entry.name, entry.duration);
+    if (entry.entryType === 'measure') {
+      d(entry.name, entry.duration);
+    } else {
+      d(entry.name);
+    }
   });
   // obs.disconnect();
 });
