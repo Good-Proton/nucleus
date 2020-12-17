@@ -473,10 +473,12 @@ for (const p of Reflect.ownKeys(SequelizeDriver.prototype)) {
       if (r instanceof Promise) {
         (r as Promise<any>).catch(() => { }).then(() => {
           const endMark = `SequelizeDriver:${f.name}#${cid++} end`;
+          performance.mark(endMark);
           performance.measure(`async ${f.name}`, startMark, endMark);
         });
       } else {
         const endMark = `SequelizeDriver:${f.name}#${cid++} end`;
+        performance.mark(endMark);
         performance.measure(f.name, startMark, endMark);
       }
       return r;
